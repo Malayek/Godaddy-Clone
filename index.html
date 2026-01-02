@@ -1,187 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DomainPro – Domain Search & Management</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>DomainPro – Domains, Websites & Hosting</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0b1020;color:#f5f5f5}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#ffffff;color:#111827}
     a{text-decoration:none;color:inherit}
-    .app{display:flex;min-height:100vh}
-    .sidebar{width:240px;background:#050814;border-right:1px solid #1f253a;padding:20px 15px;position:sticky;top:0;align-self:flex-start;height:100vh}
-    .logo{font-size:22px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:25px;color:#21c55d}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;color:#c7cbe6;font-size:15px}
-    .nav-item.active,.nav-item:hover{background:#111827;color:#fff}
-    .nav-item i{width:20px;text-align:center}
-    .main{flex:1;padding:20px;max-width:1200px;margin:0 auto}
+    img{max-width:100%;display:block}
+    .app{min-height:100vh;display:flex;flex-direction:column}
+    .header{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e5e7eb;position:sticky;top:0;background:#ffffff;z-index:20}
+    .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:22px;color:#16a34a}
+    .logo i{color:#16a34a}
+    .nav-links{display:flex;gap:18px;font-size:14px}
+    .nav-links span{cursor:pointer;color:#374151}
+    .nav-links span:hover{color:#111827}
+    .header-actions{display:flex;gap:8px;align-items:center}
+    .btn{border-radius:999px;padding:8px 16px;font-size:14px;border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+    .btn-outline{border-color:#d1d5db;background:#ffffff;color:#111827}
+    .btn-primary{background:#16a34a;border-color:#16a34a;color:#ffffff;font-weight:600}
+    .btn-primary:hover{background:#15803d;border-color:#15803d}
+    .main{flex:1;max-width:1200px;width:100%;margin:0 auto;padding:24px 16px 40px}
     .page{display:none}
     .page.active{display:block}
-    .hero{background:radial-gradient(circle at top left,#1e293b,#020617);border-radius:18px;padding:30px 24px;margin-bottom:20px;border:1px solid #1f2937}
-    .hero h1{font-size:26px;margin-bottom:10px}
-    .hero p{color:#9ca3af;margin-bottom:18px}
-    .search-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-    .search-input-wrap{flex:1;min-width:240px;position:relative}
-    .search-input-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#6b7280}
-    .search-input{width:100%;padding:12px 12px 12px 34px;border-radius:999px;border:1px solid #374151;background:#020617;color:#f9fafb;font-size:15px}
-    .search-input:focus{outline:2px solid #22c55e;outline-offset:1px}
-    .search-btn{padding:12px 18px;border-radius:999px;border:none;background:#22c55e;color:#022c22;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
-    .search-btn:hover{background:#16a34a}
-    .ext-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .ext-chip{padding:4px 10px;border-radius:999px;border:1px solid #374151;font-size:12px;color:#e5e7eb;cursor:pointer}
-    .ext-chip span{color:#22c55e;font-weight:600}
-    .columns{display:grid;grid-template-columns:2fr 1.3fr;gap:18px;margin-top:18px}
-    .card{background:#020617;border-radius:14px;border:1px solid #111827;padding:16px}
-    .card h2{font-size:18px;margin-bottom:8px}
-    .card p{font-size:14px;color:#9ca3af;margin-bottom:10px}
-    .price-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-    .price-main{font-size:18px;font-weight:700;color:#22c55e}
-    .price-tag{font-size:12px;color:#9ca3af}
-    .badge{font-size:11px;border-radius:999px;padding:3px 8px;border:1px solid #10b981;color:#6ee7b7}
-    .results{margin-top:16px}
-    .result-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #1f2933}
-    .result-name{font-weight:600}
-    .result-meta{font-size:12px;color:#9ca3af}
+    .hero{display:grid;grid-template-columns:2fr 1.5fr;gap:32px;align-items:center;margin-bottom:32px}
+    .hero-copy h1{font-size:32px;margin-bottom:10px}
+    .hero-copy p{font-size:15px;color:#4b5563;margin-bottom:16px}
+    .search-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+    .search-input-wrap{flex:1;min-width:230px;position:relative}
+    .search-input-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9ca3af}
+    .search-input{width:100%;padding:11px 12px 11px 32px;border-radius:999px;border:1px solid #d1d5db;font-size:15px}
+    .search-input:focus{outline:2px solid #16a34a;outline-offset:1px;border-color:#16a34a}
+    .search-btn{padding:11px 18px;border-radius:999px;border:none;background:#16a34a;color:#ffffff;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+    .search-btn:hover{background:#15803d}
+    .ext-list{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;margin-top:8px}
+    .ext-chip{padding:4px 10px;border-radius:999px;border:1px solid #e5e7eb;cursor:pointer;color:#4b5563;background:#f9fafb}
+    .ext-chip span{color:#16a34a;font-weight:600;margin-left:4px}
+    .hero-media{position:relative}
+    .hero-card{background:#f3f4f6;border-radius:16px;padding:18px;border:1px solid #e5e7eb;box-shadow:0 10px 25px rgba(15,23,42,0.08)}
+    .hero-card h2{font-size:16px;margin-bottom:6px}
+    .hero-card p{font-size:13px;color:#6b7280;margin-bottom:10px}
+    .hero-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;font-size:12px}
+    .hero-grid-item{background:#ffffff;border-radius:10px;padding:8px;border:1px solid #e5e7eb;display:flex;flex-direction:column;gap:2px}
+    .hero-grid-item span:first-child{font-weight:600}
+    .hero-tag{position:absolute;top:-10px;right:0;background:#ecfdf5;border-radius:999px;padding:4px 10px;font-size:11px;color:#166534;border:1px solid #bbf7d0}
+    .section-title{font-size:20px;margin:16px 0 8px}
+    .section-sub{font-size:14px;color:#6b7280;margin-bottom:14px}
+    .columns{display:grid;grid-template-columns:2fr 1.4fr;gap:20px;margin-bottom:28px}
+    .card{border-radius:12px;border:1px solid #e5e7eb;background:#ffffff;padding:14px 16px}
+    .card h2{font-size:16px;margin-bottom:4px}
+    .card p{font-size:13px;color:#6b7280;margin-bottom:10px}
+    .results{margin-top:10px}
+    .result-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed #e5e7eb}
+    .result-name{font-weight:600;font-size:14px}
+    .result-meta{font-size:12px;color:#6b7280}
     .result-status{font-size:12px;font-weight:600}
-    .result-status.available{color:#22c55e}
+    .result-status.available{color:#16a34a}
     .result-status.taken{color:#f97316}
-    .btn-sm{padding:6px 10px;border-radius:999px;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
-    .btn-primary{background:#22c55e;color:#022c22;font-weight:600}
-    .btn-primary:hover{background:#16a34a}
-    .btn-ghost{background:transparent;color:#e5e7eb;border:1px solid #374151}
-    .btn-ghost:hover{background:#111827}
-    .section-title{font-size:18px;margin-bottom:10px}
+    .btn-sm{border-radius:999px;padding:5px 10px;font-size:12px;border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    .btn-sm-primary{background:#16a34a;border-color:#16a34a;color:#ffffff;font-weight:500}
+    .btn-sm-primary:hover{background:#15803d}
+    .btn-sm-ghost{background:#ffffff;border-color:#e5e7eb;color:#374151}
+    .btn-sm-ghost:hover{background:#f3f4f6}
+    .badge{font-size:11px;padding:3px 8px;border-radius:999px;background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:26px}
+    .gallery-card{border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;overflow:hidden;display:flex;flex-direction:column}
+    .gallery-img{background:linear-gradient(135deg,#22c55e,#0ea5e9);height:120px;display:flex;align-items:center;justify-content:center;color:#f9fafb;font-size:20px}
+    .gallery-body{padding:10px 12px;font-size:13px}
+    .gallery-body h3{font-size:14px;margin-bottom:4px}
+    .gallery-body p{color:#6b7280;font-size:12px}
+    .gallery-body .link{margin-top:6px;font-size:12px;color:#2563eb;cursor:pointer}
     .table{width:100%;border-collapse:collapse;font-size:13px}
-    .table th,.table td{padding:8px 6px;border-bottom:1px solid #111827;text-align:left}
+    .table th,.table td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:left}
     .status-pill{padding:2px 8px;border-radius:999px;font-size:11px}
-    .status-active{background:#022c22;color:#22c55e}
-    .status-expiring{background:#451a03;color:#fdba74}
-    .status-expired{background:#1f2937;color:#9ca3af}
-    .tag{font-size:11px;border-radius:999px;padding:2px 6px;background:#0f172a;color:#9ca3af}
-    .topbar{display:none}
-    @media (max-width:900px){
-      .app{flex-direction:column}
-      .sidebar{display:none}
-      .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #1f2937;background:#020617;position:sticky;top:0;z-index:10}
-      .main{padding:12px}
+    .status-active{background:#ecfdf5;color:#166534}
+    .status-expiring{background:#fffbeb;color:#92400e}
+    .status-expired{background:#f3f4f6;color:#6b7280}
+    .top-note{font-size:13px;color:#6b7280;margin-bottom:10px}
+    .footer{border-top:1px solid #e5e7eb;padding:14px 16px;font-size:12px;color:#9ca3af;text-align:center}
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
       .columns{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .header{padding:10px 14px}
+      .main{padding:16px 12px 32px}
+    }
+    @media(max-width:640px){
+      .gallery{grid-template-columns:1fr}
+      .nav-links{display:none}
     }
   </style>
 </head>
 <body>
 <div class="app">
-  <header class="topbar">
+  <header class="header">
     <div class="logo"><i class="fa-solid fa-globe"></i>DomainPro</div>
-    <div>
-      <button class="btn-sm btn-ghost" onclick="switchPage('home')"><i class="fa-solid fa-house"></i>Home</button>
-      <button class="btn-sm btn-ghost" onclick="switchPage('cart')"><i class="fa-solid fa-cart-shopping"></i>Cart</button>
-      <button class="btn-sm btn-ghost" onclick="switchPage('dashboard')"><i class="fa-solid fa-user"></i>Dashboard</button>
+    <nav class="nav-links">
+      <span onclick="switchPage('home')">Domains</span>
+      <span onclick="switchPage('websites')">Websites</span>
+      <span onclick="switchPage('hosting')">Hosting</span>
+      <span onclick="switchPage('dashboard')">My Products</span>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="switchPage('dashboard')">Sign in</button>
+      <button class="btn btn-primary" onclick="switchPage('home')">Get started</button>
     </div>
   </header>
 
-  <aside class="sidebar">
-    <div class="logo"><i class="fa-solid fa-globe"></i>DomainPro</div>
-    <div class="nav-item active" data-page="home" onclick="switchPage('home')">
-      <i class="fa-solid fa-magnifying-glass"></i><span>Domain Search</span>
-    </div>
-    <div class="nav-item" data-page="cart" onclick="switchPage('cart')">
-      <i class="fa-solid fa-cart-shopping"></i><span>Cart & Checkout</span>
-    </div>
-    <div class="nav-item" data-page="dashboard" onclick="switchPage('dashboard')">
-      <i class="fa-solid fa-user"></i><span>My Domains</span>
-    </div>
-  </aside>
-
   <main class="main">
-    <!-- HOME / SEARCH PAGE -->
+    <!-- HOME / DOMAINS -->
     <section id="page-home" class="page active">
-      <div class="hero">
-        <h1>Find the perfect domain for your next project</h1>
-        <p>Search across popular extensions, check availability instantly, and manage everything in one place.</p>
-        <div class="search-row">
-          <div class="search-input-wrap">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="domainInput" type="text" class="search-input" placeholder="Type a domain, e.g. mycoolstartup.com" />
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>Everything starts with a domain.</h1>
+          <p>Search millions of names, grab the perfect one, then connect it to a website, store or portfolio in minutes.</p>
+          <div class="search-row">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="domainInput" class="search-input" placeholder="Search for your perfect domain" />
+            </div>
+            <button class="search-btn" onclick="handleSearch()">
+              <i class="fa-solid fa-magnifying-glass"></i> Search
+            </button>
           </div>
-          <button class="search-btn" onclick="handleSearch()">
-            <i class="fa-solid fa-magnifying-glass"></i> Search
-          </button>
+          <div class="ext-list">
+            <div class="ext-chip" onclick="appendExt('.com')">.com <span>$9.99/yr</span></div>
+            <div class="ext-chip" onclick="appendExt('.net')">.net <span>$11.49/yr</span></div>
+            <div class="ext-chip" onclick="appendExt('.org')">.org <span>$8.99/yr</span></div>
+            <div class="ext-chip" onclick="appendExt('.ai')">.ai <span>$59.99/yr</span></div>
+            <div class="ext-chip" onclick="appendExt('.store')">.store <span>$3.99/yr</span></div>
+          </div>
         </div>
-        <div class="ext-list">
-          <div class="ext-chip" onclick="appendExt('.com')">.com <span>$9.99</span></div>
-          <div class="ext-chip" onclick="appendExt('.net')">.net <span>$11.49</span></div>
-          <div class="ext-chip" onclick="appendExt('.org')">.org <span>$8.99</span></div>
-          <div class="ext-chip" onclick="appendExt('.ai')">.ai <span>$59.99</span></div>
-          <div class="ext-chip" onclick="appendExt('.dev')">.dev <span>$14.99</span></div>
+        <div class="hero-media">
+          <div class="hero-tag"><i class="fa-solid fa-star"></i> Popular setup</div>
+          <div class="hero-card">
+            <h2>Launch a brand in a weekend</h2>
+            <p>Pick a name, pair it with a site template, and start selling with built‑in payments and email.</p>
+            <div class="hero-grid">
+              <div class="hero-grid-item">
+                <span>Domains</span>
+                <span>From $0.99 for first year.</span>
+              </div>
+              <div class="hero-grid-item">
+                <span>Website builder</span>
+                <span>Drag‑and‑drop sections & layouts.</span>
+              </div>
+              <div class="hero-grid-item">
+                <span>Online store</span>
+                <span>Sell products, services & bookings.</span>
+              </div>
+              <div class="hero-grid-item">
+                <span>Marketing tools</span>
+                <span>Email, SEO and social ready.</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <h2 class="section-title">Find your domain</h2>
+      <p class="section-sub">Check availability, lock in your name, and add it to cart with one click.</p>
 
       <div class="columns">
         <div class="card">
-          <div class="price-row">
-            <h2>Popular extensions</h2>
-            <span class="badge"><i class="fa-solid fa-bolt"></i> Hot offers</span>
-          </div>
-          <p>Secure your brand with these high‑value domain endings.</p>
+          <h2>Domain search results</h2>
+          <p>Enter a name above to see popular extensions, first‑year pricing and availability.</p>
           <div class="results" id="searchResults">
-            <p style="color:#9ca3af;font-size:14px;">Start by searching a domain to see availability and pricing.</p>
+            <p style="font-size:13px;color:#6b7280;">Try something like <strong>sunrisebakery</strong> or <strong>mydevportfolio</strong> to see example results.</p>
           </div>
         </div>
 
         <div class="card">
-          <h2>Promotions & bundles</h2>
-          <p>Save more when you combine domains with hosting and email.</p>
-          <div class="price-row">
+          <h2>Deals & bundles</h2>
+          <p>Save when you pair domains with websites and email.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
             <div>
-              <div class="price-main">From $3.99/yr</div>
-              <div class="price-tag">.site, .store, .online</div>
+              <div style="font-weight:700;color:#16a34a;">From $3.99/yr</div>
+              <div style="font-size:12px;color:#6b7280;">.site, .store, .online</div>
             </div>
-            <button class="btn-sm btn-primary" onclick="alertInfo('promo')">View deals</button>
+            <span class="badge"><i class="fa-solid fa-bolt"></i> Limited time</span>
           </div>
-          <ul style="font-size:13px;color:#9ca3af;list-style:disc;padding-left:18px;">
-            <li>Free privacy protection on eligible domains</li>
-            <li>1‑click DNS templates for quick setup</li>
-            <li>24/7 support from domain specialists</li>
+          <ul style="font-size:13px;color:#4b5563;margin-left:16px;list-style:disc;">
+            <li>Free privacy protection on eligible domains.</li>
+            <li>DNS, forwarding and basic email included.</li>
+            <li>Connect to any website builder in clicks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="section-title">Create like these examples</h2>
+      <p class="section-sub">Here are sample websites you might build with your domain – portfolio, store and blog concepts inspired by GoDaddy templates.[web:39]</p>
+
+      <div class="gallery">
+        <article class="gallery-card">
+          <div class="gallery-img">
+            <i class="fa-solid fa-camera-retro"></i>
+          </div>
+          <div class="gallery-body">
+            <h3>Photography portfolio</h3>
+            <p>Clean gallery grid with large hero image and booking button.</p>
+            <div class="link" onclick="switchPage('websites')">View template details →</div>
+          </div>
+        </article>
+
+        <article class="gallery-card">
+          <div class="gallery-img" style="background:linear-gradient(135deg,#fb923c,#f97316);">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div class="gallery-body">
+            <h3>Online store</h3>
+            <p>Product cards, reviews, and checkout page ready for your catalog.</p>
+            <div class="link" onclick="switchPage('websites')">See store layout →</div>
+          </div>
+        </article>
+
+        <article class="gallery-card">
+          <div class="gallery-img" style="background:linear-gradient(135deg,#4f46e5,#0ea5e9);">
+            <i class="fa-solid fa-pen-nib"></i>
+          </div>
+          <div class="gallery-body">
+            <h3>Personal blog</h3>
+            <p>Featured posts, categories and newsletter signup section.</p>
+            <div class="link" onclick="switchPage('websites')">Explore blog idea →</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- WEBSITES PAGE (PICTURE SAMPLES) -->
+    <section id="page-websites" class="page">
+      <h2 class="section-title">Website templates & samples</h2>
+      <p class="section-sub">Browse sample sections similar to GoDaddy’s builder: hero banners, image grids, testimonials and contact blocks.[web:39][web:43]</p>
+
+      <div class="columns">
+        <div class="card">
+          <h2>Hero sections</h2>
+          <p>Big visuals with bold titles and call‑to‑action buttons.</p>
+          <div style="display:grid;grid-template-columns:1fr;gap:10px;font-size:13px;">
+            <div style="border-radius:10px;border:1px solid #e5e7eb;overflow:hidden;">
+              <div style="background:linear-gradient(135deg,#22c55e,#15803d);height:110px;display:flex;align-items:center;justify-content:center;color:#f9fafb;font-size:18px;">Hero with background image</div>
+              <div style="padding:8px 10px;">
+                <strong>Service business hero</strong>
+                <p style="font-size:12px;color:#6b7280;">Logo, headline, short blurb and primary “Book now” button.</p>
+              </div>
+            </div>
+            <div style="border-radius:10px;border:1px solid #e5e7eb;overflow:hidden;">
+              <div style="background:#e5e7eb;height:110px;display:flex;align-items:center;justify-content:center;color:#4b5563;">Split hero (text + image)</div>
+              <div style="padding:8px 10px;">
+                <strong>Product hero</strong>
+                <p style="font-size:12px;color:#6b7280;">Text left, product shot right, with secondary “Learn more” link.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Image & content blocks</h2>
+          <p>Grids, testimonials and contact sections you can plug into any page.</p>
+          <ul style="font-size:13px;color:#4b5563;margin-left:16px;list-style:disc;">
+            <li>3‑column feature grid with icons.</li>
+            <li>Customer testimonials carousel.</li>
+            <li>Contact form with map and opening hours.</li>
+          </ul>
+          <button class="btn btn-outline" style="margin-top:10px;" onclick="alertInfo('templates')">
+            Browse more sample sections
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOSTING PAGE (MORE CONTENT) -->
+    <section id="page-hosting" class="page">
+      <h2 class="section-title">Hosting & performance</h2>
+      <p class="section-sub">Fast, secure hosting options for blogs, stores and business sites, similar to GoDaddy’s shared and managed plans.[web:38]</p>
+      <div class="columns">
+        <div class="card">
+          <h2>Starter hosting</h2>
+          <p>Perfect for a single small site or landing page.</p>
+          <ul style="font-size:13px;color:#4b5563;margin-left:16px;list-style:disc;">
+            <li>1 website · 10 GB storage · email forwarding.</li>
+            <li>Automatic backups and free SSL certificates.</li>
+            <li>Control panel with file manager and database tools.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Business & e‑commerce hosting</h2>
+          <p>Scale traffic, products and checkout experiences.</p>
+          <ul style="font-size:13px;color:#4b5563;margin-left:16px;list-style:disc;">
+            <li>Higher CPU/RAM and unmetered bandwidth.</li>
+            <li>Optimized for WordPress and popular store platforms.</li>
+            <li>Staging sites and 1‑click restores.</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- CART PAGE -->
-    <section id="page-cart" class="page">
-      <h2 class="section-title">Your cart</h2>
-      <p style="color:#9ca3af;font-size:14px;margin-bottom:12px;">Domains you selected from search appear here. Checkout is simulated (no real payment).</p>
-      <div class="card">
-        <table class="table" id="cartTable">
-          <thead>
-          <tr>
-            <th>Domain</th>
-            <th>Term</th>
-            <th>Price (1st yr)</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody id="cartBody">
-          <tr id="cartEmptyRow">
-            <td colspan="4" style="text-align:center;color:#6b7280;padding:18px 0;">No domains in cart yet. Go to “Domain Search” to add some.</td>
-          </tr>
-          </tbody>
-        </table>
-        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:#9ca3af;">Checkout flow is non‑functional in this demo, but all interactions work.</div>
-          <button class="btn-sm btn-primary" onclick="alertInfo('checkout')">
-            <i class="fa-solid fa-lock"></i> Proceed to checkout
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- DASHBOARD PAGE -->
+    <!-- DASHBOARD / MY PRODUCTS -->
     <section id="page-dashboard" class="page">
-      <h2 class="section-title">My domains</h2>
-      <p style="color:#9ca3af;font-size:14px;margin-bottom:12px;">Manage registered domains, renewal options, and transfers (mock data).</p>
+      <h2 class="section-title">My domains & products</h2>
+      <p class="section-sub">Manage sample domains and see how a GoDaddy‑like dashboard might look for a user account.[web:40]</p>
+
+      <p class="top-note">Domain management (renew, transfer) is mock only, but all buttons are clickable and respond.</p>
       <div class="card">
+        <h2>Domains</h2>
         <table class="table">
           <thead>
           <tr>
@@ -191,233 +314,141 @@
             <th>Actions</th>
           </tr>
           </thead>
-          <tbody id="domainTableBody">
-          <!-- Filled via JS -->
-          </tbody>
+          <tbody id="domainTableBody"></tbody>
         </table>
       </div>
     </section>
+
+    <!-- CART PANEL -->
+    <section class="page" id="page-cart">
+      <!-- Optional: if you want a separate cart page, you can hook it here -->
+    </section>
   </main>
+
+  <footer class="footer">
+    Sample GoDaddy‑style interface for learning purposes. Domains, prices and hosting plans are mock only.[web:37]
+  </footer>
 </div>
 
 <script>
-  // Mock data for availability: some are taken, others free
-  const takenDomains = [
-    "google.com","facebook.com","youtube.com",
-    "mybrand.com","example.com","startup.net"
-  ];
-
+  const takenDomains = ["google.com","example.com","mybrand.com","startup.net"];
   const basePrices = {
-    ".com": 9.99,
-    ".net": 11.49,
-    ".org": 8.99,
-    ".ai": 59.99,
-    ".dev": 14.99,
-    "default": 12.49
+    ".com":9.99,".net":11.49,".org":8.99,".ai":59.99,".store":3.99,"default":12.49
   };
-
-  let cart = [];
   const managedDomains = [
-    {
-      name:"mybrand.com",
-      status:"active",
-      expires:"2026-08-12",
-      autoRenew:true
-    },
-    {
-      name:"sideproject.dev",
-      status:"expiring",
-      expires:"2025-02-01",
-      autoRenew:false
-    },
-    {
-      name:"oldportfolio.net",
-      status:"expired",
-      expires:"2023-11-03",
-      autoRenew:false
-    }
+    {name:"mybrand.com",status:"active",expires:"2026-08-12"},
+    {name:"sunrisebakery.store",status:"expiring",expires:"2025-02-01"},
+    {name:"oldportfolio.net",status:"expired",expires:"2023-11-03"}
   ];
+  let cart = [];
 
   function getExtension(domain){
     const idx = domain.lastIndexOf(".");
-    if(idx === -1) return "";
+    if(idx===-1) return "";
     return domain.slice(idx);
   }
-
   function getPrice(ext){
-    if(basePrices[ext]) return basePrices[ext];
-    return basePrices["default"];
+    return basePrices[ext] || basePrices["default"];
   }
 
   function handleSearch(){
-    const input = document.getElementById("domainInput");
-    const query = input.value.trim().toLowerCase();
-    const resultsEl = document.getElementById("searchResults");
-
-    if(!query){
-      resultsEl.innerHTML = "<p style='color:#f97316;font-size:14px;'>Please enter a domain name to search.</p>";
+    const input=document.getElementById("domainInput");
+    const q=input.value.trim().toLowerCase();
+    const out=document.getElementById("searchResults");
+    if(!q){
+      out.innerHTML="<p style='font-size:13px;color:#b91c1c;'>Enter a name to search.</p>";
       return;
     }
-
-    const suggestions = buildSuggestionList(query);
-    let html = "";
-
-    suggestions.forEach(domain => {
-      const ext = getExtension(domain);
-      const price = getPrice(ext);
-      const isTaken = takenDomains.includes(domain);
-      const statusClass = isTaken ? "taken" : "available";
-      const statusText = isTaken ? "Taken" : "Available";
-      const btnDisabled = isTaken ? "disabled" : "";
-      const btnLabel = isTaken ? "Unavailable" : "Add to cart";
-
-      html += `
-        <div class="result-item">
-          <div>
-            <div class="result-name">${domain}</div>
-            <div class="result-meta">$${price.toFixed(2)}/1st yr · ${ext || "custom"}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="result-status ${statusClass}">${statusText}</span>
-            <button class="btn-sm btn-primary" ${btnDisabled}
-              onclick="addToCart('${domain.replace(/'/g,"\\'")}', ${price.toFixed(2)})">
-              <i class="fa-solid fa-cart-plus"></i>${btnLabel}
-            </button>
-          </div>
+    const suggestions=buildSuggestionList(q);
+    let html="";
+    suggestions.forEach(domain=>{
+      const ext=getExtension(domain);
+      const price=getPrice(ext);
+      const isTaken=takenDomains.includes(domain);
+      const statusClass=isTaken?"taken":"available";
+      const statusText=isTaken?"Taken":"Available";
+      const disabled=isTaken?"disabled":"";
+      const label=isTaken?"Unavailable":"Add to cart";
+      html+=`
+      <div class="result-item">
+        <div>
+          <div class="result-name">${domain}</div>
+          <div class="result-meta">$${price.toFixed(2)}/1st yr · ${ext||"custom"}</div>
         </div>
-      `;
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="result-status ${statusClass}">${statusText}</span>
+          <button class="btn-sm btn-sm-primary" ${disabled}
+            onclick="addToCart('${domain.replace(/'/g,"\\'")}',${price.toFixed(2)})">
+            <i class="fa-solid fa-cart-plus"></i>${label}
+          </button>
+        </div>
+      </div>`;
     });
-
-    resultsEl.innerHTML = html;
+    out.innerHTML=html;
   }
 
-  function buildSuggestionList(query){
-    const existingExt = getExtension(query);
-    if(existingExt){
-      // User already typed extension
-      return [query];
-    }
-    const base = query;
-    const exts = [".com",".net",".org",".ai",".dev"];
-    return exts.map(e => base + e);
+  function buildSuggestionList(q){
+    const ext=getExtension(q);
+    if(ext) return [q];
+    const exts=[".com",".net",".org",".ai",".store"];
+    return exts.map(e=>q+e);
   }
 
   function appendExt(ext){
-    const input = document.getElementById("domainInput");
-    let val = input.value.trim();
-    if(!val){
-      input.value = "mynewdomain" + ext;
+    const input=document.getElementById("domainInput");
+    let v=input.value.trim();
+    if(!v){input.value="mynewdomain"+ext;return;}
+    if(v.includes(".")) return;
+    input.value=v+ext;
+  }
+
+  function addToCart(domain,price){
+    if(cart.find(i=>i.domain===domain)){
+      alert("That domain is already in your cart.");
       return;
     }
-    if(val.includes(".")) return;
-    input.value = val + ext;
-  }
-
-  function addToCart(domain, price){
-    if(cart.find(item => item.domain === domain)){
-      alert("This domain is already in your cart.");
-      return;
-    }
-    cart.push({domain, years:1, price});
-    renderCart();
-    switchPage("cart");
-  }
-
-  function renderCart(){
-    const body = document.getElementById("cartBody");
-    const emptyRow = document.getElementById("cartEmptyRow");
-
-    if(cart.length === 0){
-      emptyRow.style.display = "";
-      return;
-    }
-    emptyRow.style.display = "none";
-    body.innerHTML = "";
-
-    cart.forEach((item,index) => {
-      body.innerHTML += `
-        <tr>
-          <td>${item.domain}</td>
-          <td>
-            <select onchange="updateYears(${index}, this.value)">
-              <option value="1"${item.years===1?" selected":""}>1 year</option>
-              <option value="2"${item.years===2?" selected":""}>2 years</option>
-              <option value="3"${item.years===3?" selected":""}>3 years</option>
-            </select>
-          </td>
-          <td>$${(item.price * item.years).toFixed(2)}</td>
-          <td>
-            <button class="btn-sm btn-ghost" onclick="removeFromCart(${index})">
-              <i class="fa-solid fa-trash"></i>Remove
-            </button>
-          </td>
-        </tr>
-      `;
-    });
-  }
-
-  function updateYears(index,val){
-    const years = parseInt(val,10) || 1;
-    cart[index].years = years;
-    renderCart();
-  }
-
-  function removeFromCart(index){
-    cart.splice(index,1);
-    renderCart();
+    cart.push({domain,price,years:1});
+    alert("Added "+domain+" to cart (demo only).");
   }
 
   function renderManagedDomains(){
-    const body = document.getElementById("domainTableBody");
-    body.innerHTML = "";
-    managedDomains.forEach(d => {
-      let statusClass = "status-active";
-      if(d.status==="expiring") statusClass = "status-expiring";
-      if(d.status==="expired") statusClass = "status-expired";
-      body.innerHTML += `
-        <tr>
-          <td>${d.name}</td>
-          <td><span class="status-pill ${statusClass}">${d.status}</span></td>
-          <td>${d.expires}</td>
-          <td>
-            <button class="btn-sm btn-primary" onclick="alertInfo('renew ${d.name}')">
-              <i class="fa-solid fa-rotate"></i>Renew
-            </button>
-            <button class="btn-sm btn-ghost" onclick="alertInfo('transfer ${d.name}')">
-              <i class="fa-solid fa-arrow-right-arrow-left"></i>Transfer
-            </button>
-          </td>
-        </tr>
-      `;
+    const body=document.getElementById("domainTableBody");
+    body.innerHTML="";
+    managedDomains.forEach(d=>{
+      let statusClass="status-active";
+      if(d.status==="expiring") statusClass="status-expiring";
+      if(d.status==="expired") statusClass="status-expired";
+      body.innerHTML+=`
+      <tr>
+        <td>${d.name}</td>
+        <td><span class="status-pill ${statusClass}">${d.status}</span></td>
+        <td>${d.expires}</td>
+        <td>
+          <button class="btn-sm btn-sm-primary" onclick="alertInfo('renew ${d.name}')">
+            <i class="fa-solid fa-rotate"></i>Renew
+          </button>
+          <button class="btn-sm btn-sm-ghost" onclick="alertInfo('transfer ${d.name}')">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>Transfer
+          </button>
+        </td>
+      </tr>`;
     });
   }
 
   function switchPage(page){
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById("page-" + page).classList.add("active");
-
-    document.querySelectorAll(".nav-item").forEach(item => {
-      if(item.dataset.page === page) item.classList.add("active");
-      else item.classList.remove("active");
-    });
-
-    if(page === "cart") renderCart();
-    if(page === "dashboard") renderManagedDomains();
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    const el=document.getElementById("page-"+page);
+    if(el) el.classList.add("active");
   }
 
   function alertInfo(type){
-    alert("This is a demo action for: " + type + ". In a real app, this would navigate to a full flow.");
+    alert("Demo click: "+type+". In a real platform this would open a full management flow.");
   }
 
-  // Keyboard search
-  document.getElementById("domainInput").addEventListener("keypress", e => {
-    if(e.key === "Enter"){
-      e.preventDefault();
-      handleSearch();
-    }
+  document.getElementById("domainInput").addEventListener("keypress",e=>{
+    if(e.key==="Enter"){e.preventDefault();handleSearch();}
   });
 
-  // Initial dashboard render
   renderManagedDomains();
 </script>
 </body>
